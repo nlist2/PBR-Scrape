@@ -8,10 +8,17 @@ from login_function import pbr_login # this imports Atom's login function
 # request test -> works for me...
 
 r = requests.get(
-    'https://en.wikipedia.org/wiki/Web_scraping')
+    'https://www.prepbaseballreport.com/profile-search-results')
 
 if r.status_code == 200:
     soup = BeautifulSoup(r.content, "html.parser")
     
-    for headline in soup.find_all("span", {"class": "mw-headline"}):
+    for headline in soup.find_all("tr", {"class": "alt"}):
         print(headline.text)
+
+    for player in soup.find_all("tr"):
+        print(player.text)
+        
+    print(len(headline), len(player))
+else:
+    print("failed")
