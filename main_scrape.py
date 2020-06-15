@@ -1,3 +1,3 @@
-import BeautifulSoup4 as bs4
+from bs4 import BeautifulSoup as bs4
 import requests
 
