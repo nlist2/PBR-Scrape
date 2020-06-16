@@ -17,6 +17,7 @@ sess = pbr_login(requests.Session())
 def get_stats(url):
     ranking_list = []
     stat_list = []
+    report_list = []
     r = sess.get(str(url)) # initiating a session with the account logged in
 
     if r.status_code == 200:
@@ -31,13 +32,23 @@ def get_stats(url):
             print("This player is not ranked.")
         
         # this chunk gets all of the stats available to regular consumers
-        for stat in soup.find_all("ul", {"class": "data-list"}):
-            for naked_stat in stat.find_all("strong"):
-                stat_list.append(naked_stat.text)
+        try:
+            for stat in soup.find_all("ul", {"class": "data-list"}):
+                for naked_stat in stat.find_all("strong"):
+                    stat_list.append(naked_stat.text)
+        except:
+            print("Regular data was not found.") # shouldn't get called
+        
+        # this chunk gets the reports
+        try:
+            for stat in soup.find_all("div", {"class": "comment"}):
+                    report_list.append(stat.text)
+        except:    
+            print("Report data not found.")
 
-        return stat_list, ranking_list     
+        return stat_list, ranking_list, report_list
 
     else:
         print("Status Code not 200")
 
-print(get_stats("https://www.prepbaseballreport.com/profiles/NY/Jon-Melarczik-9624573108#tab5"))
+print(get_stats("https://www.prepbaseballreport.com/profiles/NY/Ian-Anderson-9408172536-8451697230#tab2"))
