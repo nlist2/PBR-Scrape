@@ -7,6 +7,8 @@ from login_function import pbr_login # this imports Atom's login function
 
 # request test -> works for me...
 
+sess = pbr_login(requests.Session())
+
 r = requests.get(
     'https://www.prepbaseballreport.com/profile-search-results')
 
@@ -18,7 +20,7 @@ if r.status_code == 200:
 
     for player in soup.find_all("tr"):
         print(player.text)
-        
+
     print(len(headline), len(player))
 else:
     print("failed")

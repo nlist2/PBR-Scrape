@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 def pbr_login(sess):
     loginurl = 'https://www.prepbaseballreport.com/customer/account/login/'
     loginaction = 'https://www.prepbaseballreport.com/customer/account/loginPost/'
