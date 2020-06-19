@@ -50,11 +50,27 @@ def get_stats(url):
 
         sl_df = pd.DataFrame(columns=['Graduating Class', 'Primary Position', 'High School', 'State', 'Height', 'Weight', 'Bat/Throw'])
         # print(sl_df)
-        for stat in soup.find_all("ul", {"class": "data-list"}):
+        outer_div = soup.find("ul", {"class": "data-list"})
+        for stat in outer_div.find_all("li"):
             if("Graduating Class:" in stat.text.replace("\n", "")):
                 print(stat.find("strong").text.strip())
                     #sl_df.append(pd.Series(naked_stat.text.strip(), index=sl_df.columns), ignore_index = True)
             if("Primary Position:" in stat.text.replace("\n", "")):
+                print(stat.find("strong").text.strip())
+
+            if("High School:" in stat.text.replace("\n", "")):
+                print(stat.find("strong").text.strip())
+
+            if("State:" in stat.text.replace("\n", "")):
+                print(stat.find("strong").text.strip())
+
+            if("Height:" in stat.text.replace("\n", "")):
+                print(stat.find("strong").text.strip())
+            
+            if("Weight:" in stat.text.replace("\n", "")):
+                print(stat.find("strong").text.strip())
+            
+            if("Bat/Throw:" in stat.text.replace("\n", "")):
                 print(stat.find("strong").text.strip())
 
         return stat_list #, ranking_list #, get_comments_new(url, sess)
