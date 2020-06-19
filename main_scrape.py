@@ -28,37 +28,35 @@ def get_stats(url):
 
         # checking to see if the player has a ranked profile
         try:
-                rankings = soup.select('.player-rank')
-                ranks = {}
-                if len(rankings) > 0:
-                    for rank_n, rank in enumerate(rankings):
-                        ranklabel = rank.select_one('.rank-label').text.lower().strip().replace(' ', '_')
+            rankings = soup.select('.player-rank')
+            ranks = {}
+            if len(rankings) > 0:
+                for rank_n, rank in enumerate(rankings):
+                    ranklabel = rank.select_one('.rank-label').text.lower().strip().replace(' ', '_')
             
-                        for trsh in rank.select('span'):
-                            trsh.decompose()
-                        ranks[ranklabel + '_pos_rank'] = rank.select_one('.pos-rank').text.strip()
-                        ranks[ranklabel + '_pbr_rank'] = rank.select_one('.pbr-rank').text.strip()
-                    ranking_list = pd.DataFrame([ranks])
+                    for trsh in rank.select('span'):
+                        trsh.decompose()
+                    ranks[ranklabel + '_pos_rank'] = rank.select_one('.pos-rank').text.strip()
+                    ranks[ranklabel + '_pbr_rank'] = rank.select_one('.pbr-rank').text.strip()
+                ranking_list = pd.DataFrame([ranks])
 
-                # de-clogging the function's output
-                if(pd.DataFrame([ranks]).empty):
-                    ranking_list = []
+            # de-clogging the function's output
+            if(pd.DataFrame([ranks]).empty):
+                ranking_list = []
 
-            
         except:
             print("This player is not ranked.")
         
         # this chunk gets all of the stats available to regular consumers
-        try:
-            for stat in soup.find_all("ul", {"class": "data-list"}):
-                for naked_stat in stat.find_all("strong"):
-                    stat_list.append(naked_stat.text)
-        except:
-            print("Regular data was not found.") # shouldn't get called
 
-        return get_comments_new(url, sess), stat_list, ranking_list
-        #return ranking_list
-        #return stat_list, ranking_list, get_comments_new(url, sess)
+        sl_df = pd.DataFrame(columns=['Graduating Class', 'Primary Position', 'High School', 'State', 'Height', 'Weight', 'Bat/Throw'])
+        print(sl_df)
+        for stat in soup.find_all("ul", {"class": "data-list"}):
+            if("Graduating Class:" in stat.text.replace("\n", "")):
+                for naked_stat in stat.find_all("strong"):
+                    sl_df.append(pd.Series(naked_stat.text.strip(), index=sl_df.columns), ignore_index = True)
+
+        return stat_list, ranking_list #, get_comments_new(url, sess)
 
     else:
         print("Status Code not 200")
